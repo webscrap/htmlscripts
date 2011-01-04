@@ -1,0 +1,76 @@
+<SCRIPT TYPE="text/javascript" LANGUAGE="JavaScript1.2">
+// Copyright (c) 1999-2000 by Metaproducts corp.
+
+var OfflineEx = new ActiveXObject("oe.OfflineExplorerAddUrl.1");
+var ioe = new ActiveXObject("OEVBEXT.imagegarden");
+
+alert(external.menuArguments.document.location);
+if(OfflineEx)
+{
+	var srcEvent   = external.menuArguments.event;
+	var srcDoc     = external.menuArguments.document;
+	var srcElement = srcDoc.elementFromPoint(srcEvent.clientX, srcEvent.clientY);
+	var srcAnchor  = srcElement;
+	var sComment   = "";
+	var sURL = external.menuArguments.document.location;
+	var cataid = 0;
+	var albumid = 0;
+	alert(sURL);
+	
+
+/*while(srcAnchor.tagName!="A" && srcAnchor.tagName!="AREA" && srcAnchor.tagName!="HTML") {srcAnchor=srcAnchor.parentElement;}
+// die with error on badformed document
+
+if(srcEvent.type=="MenuExtUnknown" || srcEvent.type=="MenuExtImage" || srcEvent.type=="MenuExtAnchor")
+{
+ if(srcAnchor.tagName=="A") {sComment=srcAnchor.innerText;}
+ if(srcAnchor.tagName=="AREA") {sComment=srcAnchor.alt;}
+ if(srcElement.tagName=="IMG" && sComment=="") {sComment=srcElement.alt;}
+ if(srcAnchor.tagName=="A" || srcAnchor.tagName=="AREA") {sURL = srcAnchor.href;}
+ if(srcAnchor.tagName=="HTML" && srcElement.tagName=="IMG") {sURL = srcElement.src;}
+ if(sComment=="") {sComment=sURL;}
+} */
+
+  if (srcDoc.all)
+  {
+    for (var i=0;i < srcDoc.all.length; i++)
+      if (srcDoc.all(i).tagName == 'TITLE')
+        sComment = srcDoc.all(i).innerText;
+  }
+
+//if(sURL!="")
+  
+    if (sComment == "")
+    {
+      sComment = srcDoc.location;
+    }
+	
+	
+	alert(sComment);
+	alert(srcDoc.url);
+
+	if (sURL.indexOf("http://www.imagegarden.net")==0) {
+		var ix=sURL.indexOf("cataid=");
+		var iend = 0;
+		if (ix>-1) {
+			iend=sURL.indexOf("&",ix+1);
+			if (iend>-1) cataid=sURL.substr(ix+7,iend-ix-7);
+		}
+		ix=sURL.indexOf("albumid=");
+		if (ix>-1){
+			iend=sURL.indexOf("&",ix+1);
+			if (iend==-1) iend=sURL.indexOf("#",ix+1);
+			if (iend==-1) iend=sURL.length;
+			if (iend>-1) albumid=sURL.substr(ix+8,iend-ix-8);
+		}
+	}
+	if (cataid>0 && albumid>0) 
+		ioe.downFullAlbum(cataid,albumid);
+	else
+		OfflineEx.AddUrl(srcDoc.location, sComment, "");
+}
+else
+{
+ alert("OE.dll is not registered. Please run `regsvr32.exe OE.dll`");
+}
+</SCRIPT>

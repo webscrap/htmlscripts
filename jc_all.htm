@@ -1,0 +1,21 @@
+<script language="VBScript">
+'Great thanks to Vladimir Romanov(Author of ReGet Pro)
+
+	'On Error Resume Next
+	set JetCarCatch=CreateObject("JetCar.Netscape")
+	if err<>0 then
+		MsgBox("FlashGet not properly installed!"+ vbCrLf+"Please Install FlashGet again")
+	else
+		set links = external.menuArguments.document.links
+		ReDim params(links.length*2+2)
+		params(0)=external.menuArguments.document.Url
+		params(1)=params(0)
+		params(2)=external.menuArguments.document.Title
+		for i = 0 to links.length-1
+			params(i*2+3)=links(i).href
+			params(i*2+4)=links(i).innerText	
+		next 
+		if params(0)="" or left(params(0),4)="file" then params(0)=params(1)
+		JetCarCatch.AddUrlList params
+        end if
+</script>
